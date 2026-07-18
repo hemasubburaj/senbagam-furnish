@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track Your Order — Senbagam Furniture</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .track-form { max-width:440px; margin-top:36px; }
+  .field { margin-bottom:18px; }
+  .field label { display:block; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--taupe); margin-bottom:8px; }
+  .field input { width:100%; padding:12px 14px; border:1px solid var(--line); background:var(--white); font-family:inherit; font-size:14px; border-radius:var(--radius); }
+  #track-error { color:#B23A3A; font-size:13px; margin-top:10px; min-height:16px; }
+
+  .order-result { display:none; margin-top:44px; max-width:640px; }
+  .order-result-header { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; padding-bottom:18px; border-bottom:1px solid var(--line); margin-bottom:20px; }
+  .order-status-pill { font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:6px 14px; border-radius:999px; background:var(--linen-deep); color:var(--moss); }
+  .status-track { display:flex; justify-content:space-between; margin:28px 0 32px; position:relative; }
+  .status-track::before { content:''; position:absolute; top:11px; left:0; right:0; height:2px; background:var(--line); z-index:0; }
+  .status-step { position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:8px; flex:1; }
+  .status-dot { width:24px; height:24px; border-radius:50%; background:var(--white); border:2px solid var(--line); }
+  .status-step.done .status-dot { background:var(--brass); border-color:var(--brass); }
+  .status-step-label { font-size:11px; letter-spacing:.04em; text-transform:uppercase; color:var(--taupe); text-align:center; }
+  .status-step.done .status-step-label { color:var(--moss); font-weight:600; }
+  .status-track.cancelled .status-dot { background:#B23A3A; border-color:#B23A3A; }
+
+  .order-line { display:flex; justify-content:space-between; font-size:14px; padding:10px 0; border-bottom:1px solid var(--line); }
+  .order-total-row { display:flex; justify-content:space-between; font-family:var(--font-display); font-size:20px; padding-top:16px; color:var(--moss); }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="index.html" class="brand">Senbagam<span> Furniture</span></a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="testimonials.html">Testimonials</a></li>
+        <li><a href="contact.html">Contact</a></li>
+       
+      </ul>
+    </nav>
+    <div class="nav-actions">
+      <a class="icon-btn" href="cart.html" aria-label="View cart">🛒<span class="cart-count" data-cart-count>0</span></a>
+      <button class="nav-toggle icon-btn" data-nav-toggle aria-label="Menu">☰</button>
+    </div>
+  </div>
+</header>
+
+<section class="section">
+  <div class="wrap">
+    <span class="eyebrow">Order status</span>
+    <h1 style="margin-top:8px; font-size:clamp(30px,3.6vw,42px);">Track your order</h1>
+    <p class="lede" style="margin-top:14px;">Enter your Order ID and the email you used at checkout.</p>
+
+    <form class="track-form" id="track-form">
+      <div class="field">
+        <label for="track-order-id">Order ID</label>
+        <input type="text" id="track-order-id" placeholder="e.g. 66f1a2b3c4d5e6f7a8b9c0d1" required>
+      </div>
+      <div class="field">
+        <label for="track-email">Email</label>
+        <input type="email" id="track-email" placeholder="you@example.com" required>
+      </div>
+      <button type="submit" class="btn btn-primary" id="track-submit-btn">Track order</button>
+      <div id="track-error"></div>
+    </form>
+
+    <div class="order-result" id="order-result">
+      <div class="order-result-header">
+        <div>
+          <div class="eyebrow">Order #<span id="res-id"></span></div>
+          <div class="lede" style="margin-top:4px;">Placed on <span id="res-date"></span></div>
+        </div>
+        <span class="order-status-pill" id="res-status-pill"></span>
+      </div>
+
+      <div class="status-track" id="status-track">
+        <div class="status-step" data-status="pending"><div class="status-dot"></div><div class="status-step-label">Pending</div></div>
+        <div class="status-step" data-status="processing"><div class="status-dot"></div><div class="status-step-label">Processing</div></div>
+        <div class="status-step" data-status="shipped"><div class="status-dot"></div><div class="status-step-label">Shipped</div></div>
+        <div class="status-step" data-status="delivered"><div class="status-dot"></div><div class="status-step-label">Delivered</div></div>
+      </div>
+
+      <h3 style="font-size:16px; margin-bottom:8px;">Items</h3>
+      <div id="res-items"></div>
+      <div class="order-total-row"><span>Total</span><span id="res-total"></span></div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-note" style="border-top:none; padding-top:0;">
+      <span>© 2026 Senbagam Furniture. Established 1997, Tirupur.</span>
+      <a href="index.html">Back to home</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="js/track-order.js"></script>
+</body>
+</html>

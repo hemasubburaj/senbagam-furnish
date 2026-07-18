@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Senbagam Furniture</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .about-hero { display:grid; grid-template-columns: 1fr 1fr; gap:50px; align-items:center; }
+  .about-hero .pd-media { background: var(--moss); clip-path: polygon(0 0,100% 0,100% 100%,26px 100%,0 calc(100% - 26px)); aspect-ratio: 1/1; display:flex; align-items:center; justify-content:center; padding:20px; }
+  .about-hero .pd-media img { width:100%; border-radius: 4px; }
+  .values-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:30px; margin-top:40px; }
+  .value-card { border:1px solid var(--line); padding:28px; background:var(--white); }
+  .value-card .num { font-family:var(--font-display); font-size:34px; color:var(--brass); }
+  @media (max-width: 900px){ .about-hero, .values-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="index.html" class="brand">Senbagam<span> Furniture</span></a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html" class="active">About</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="testimonials.html">Testimonials</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-actions">
+      <a class="icon-btn" href="cart.html" aria-label="View cart">🛒<span class="cart-count" data-cart-count>0</span></a>
+      <button class="nav-toggle icon-btn" data-nav-toggle aria-label="Menu">☰</button>
+    </div>
+  </div>
+</header>
+
+<div class="material-rail"><div class="material-rail-track" data-material-rail></div></div>
+
+<section class="section">
+  <div class="wrap about-hero">
+    <div>
+      <span class="eyebrow">Established 1997 · Tirupur</span>
+      <h1 style="margin-top:10px; font-size:clamp(32px,4vw,48px);">Trust, quality and comfort — for over 25 years.</h1>
+      <p class="lede" style="margin-top:18px; max-width:52ch;">Senbagam Furniture has been building bedroom, living room and pooja furniture for households across Tamil Nadu since 1997. What started as a Tirupur workshop is still run the same way today — combo packages priced fairly, delivered free across the state, and built to furnish a whole home at once.</p>
+      <div class="hero-actions" style="margin-top:26px;">
+        <a href="products.html" class="btn btn-primary">See our combo packages</a>
+        <a href="contact.html" class="btn btn-outline">Contact us</a>
+      </div>
+    </div>
+    <div class="pd-media"><img src="images/brand/senbagam-logo.jpeg" alt="Senbagam Furniture — Established 1997, Tirupur"></div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head">
+      <div><span class="eyebrow">How we work</span><h2>What stays constant</h2></div>
+    </div>
+    <div class="values-grid">
+      <div class="value-card">
+        <div class="num">01</div>
+        <h3 style="font-size:19px; margin:10px 0 8px;">Trust</h3>
+        <p class="lede">Nearly three decades of families in Tirupur and beyond furnishing their homes with us, combo after combo.</p>
+      </div>
+      <div class="value-card">
+        <div class="num">02</div>
+        <h3 style="font-size:19px; margin:10px 0 8px;">Quality</h3>
+        <p class="lede">Solid mahogany frames, real foam mattresses and finished joinery — not particleboard dressed up as wood.</p>
+      </div>
+      <div class="value-card">
+        <div class="num">03</div>
+        <h3 style="font-size:19px; margin:10px 0 8px;">Comfort</h3>
+        <p class="lede">Every combo is planned as a full home set — bedroom, living room and pooja — so nothing gets left mismatched.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-note" style="border-top:none; padding-top:0;">
+      <span>© 2026 Senbagam Furniture. Established 1997, Tirupur.</span>
+      <a href="index.html">Back to home</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login — Furnish</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  :root { --moss:#23301F; --linen:#F5F0E6; --brass:#B78A1E; --line:rgba(27,32,24,.14); --ink:#1B2018; }
+  * { box-sizing:border-box; }
+  body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+    background:var(--moss); font-family: ui-sans-serif, system-ui, sans-serif; }
+  .card { background:var(--linen); padding:44px 40px; width:100%; max-width:360px; border-radius:2px; }
+  h1 { font-size:20px; margin:0 0 6px; color:var(--moss); }
+  p.sub { margin:0 0 28px; font-size:13px; color:#8A7960; }
+  label { display:block; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#8A7960; margin-bottom:6px; }
+  input { width:100%; padding:11px 13px; border:1px solid var(--line); background:#fff; font-size:14px; margin-bottom:18px; border-radius:2px; font-family:inherit; }
+  button { width:100%; padding:12px; background:var(--moss); color:var(--linen); border:none; font-weight:600; font-size:13px; letter-spacing:.04em; text-transform:uppercase; border-radius:2px; cursor:pointer; }
+  .err { color:#B23A3A; font-size:13px; margin:-10px 0 16px; }
+</style>
+</head>
+<body>
+  <form class="card" method="POST" action="/admin/login">
+    <h1>Furnish Admin</h1>
+    <p class="sub">Sign in to manage products, orders and messages.</p>
+    <div class="err" id="err" style="display:none;">Incorrect username or password.</div>
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" autocomplete="username" required autofocus>
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" autocomplete="current-password" required>
+    <button type="submit">Sign in</button>
+  </form>
+  <script>
+    if (new URLSearchParams(location.search).get('error')) {
+      document.getElementById('err').style.display = 'block';
+    }
+  </script>
+</body>
+</html>

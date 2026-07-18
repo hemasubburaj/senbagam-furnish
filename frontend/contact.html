@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Senbagam Furniture</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .contact-layout { display:grid; grid-template-columns: 1fr 1fr; gap:56px; }
+  .field { margin-bottom:18px; }
+  .field label { display:block; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--taupe); margin-bottom:8px; }
+  .field input, .field textarea { width:100%; padding:12px 14px; border:1px solid var(--line); background:var(--white); font-family:inherit; font-size:14px; border-radius:var(--radius); }
+  .field textarea { min-height:130px; resize:vertical; }
+  .contact-info { background:var(--moss); color:var(--linen); padding:36px; }
+  .contact-info h3 { color:var(--linen); font-size:20px; margin-bottom:16px; }
+  .contact-info p { color:rgba(245,240,230,.75); margin:0 0 22px; }
+  .contact-info dl { margin:0; }
+  .contact-info dt { font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--brass-soft); margin-top:16px; }
+  .contact-info dd { margin:4px 0 0; font-size:15px; }
+  .map-frame { margin-top:56px; border:1px solid var(--line); overflow:hidden; }
+  .map-frame iframe { width:100%; height:380px; border:0; display:block; }
+  @media (max-width: 900px){ .contact-layout { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="index.html" class="brand">Senbagam<span> Furniture</span></a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="testimonials.html">Testimonials</a></li>
+        <li><a href="contact.html" class="active">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-actions">
+      <a class="icon-btn" href="cart.html" aria-label="View cart">🛒<span class="cart-count" data-cart-count>0</span></a>
+      <button class="nav-toggle icon-btn" data-nav-toggle aria-label="Menu">☰</button>
+    </div>
+  </div>
+</header>
+
+<section class="section">
+  <div class="wrap">
+    <span class="eyebrow">Get in touch</span>
+    <h1 style="margin-top:8px; font-size:clamp(32px,4vw,48px);">We reply within one business day</h1>
+
+    <div class="contact-layout" style="margin-top:40px;">
+      <form id="contact-form">
+        <div class="field">
+          <label for="c-name">Name</label>
+          <input type="text" id="c-name" required>
+        </div>
+        <div class="field">
+          <label for="c-email">Email</label>
+          <input type="email" id="c-email" required>
+        </div>
+        <div class="field">
+          <label for="c-message">Message</label>
+          <textarea id="c-message" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" id="contact-submit">Send message</button>
+        <div class="form-msg" id="contact-msg"></div>
+      </form>
+
+      <div class="contact-info">
+        <h3>Workshop &amp; studio</h3>
+        <p>Reach us directly for bulk orders, custom sizing, or trade pricing.</p>
+        <dl>
+          <dt>Phone</dt><dd><a href="tel:+918778438283" style="color:inherit;">+91 87784 38283</a></dd>
+          <dt>Email</dt><dd>info@senbagamfurniture.com</dd>
+          <dt>Location</dt><dd>N.M.P. Nagar, RVE Nagar, Valliammai Nagar, Tiruppur - 641606</dd>
+          <dt>Hours</dt><dd>Mon–Sat, 10am – 6pm IST</dd>
+        </dl>
+        <a href="https://www.google.com/maps/dir/?api=1&destination=N.M.P.%20Nagar%2C%20RVE%20Nagar%2C%20Valliammai%20Nagar%2C%20Tiruppur%2C%20Tamil%20Nadu%20641606" target="_blank" rel="noopener" class="btn btn-brass btn-sm" style="margin-top:20px;">Get Directions</a>
+      </div>
+    </div>
+
+    <div class="map-frame">
+      <iframe
+        src="https://www.google.com/maps?q=N.M.P.+Nagar,+RVE+Nagar,+Valliammai+Nagar,+Tiruppur,+Tamil+Nadu+641606&output=embed"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Senbagam Furniture location — N.M.P. Nagar, Tiruppur">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-note" style="border-top:none; padding-top:0;">
+      <span>© 2026 Senbagam Furniture. Established 1997, Tirupur.</span>
+      <a href="index.html">Back to home</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+  document.getElementById('contact-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const msg = document.getElementById('contact-msg');
+    const btn = document.getElementById('contact-submit');
+    msg.textContent = ''; msg.className = 'form-msg';
+    btn.disabled = true;
+
+    try {
+      const data = await api('/contact', {
+        method: 'POST',
+        body: JSON.stringify({
+          name: document.getElementById('c-name').value.trim(),
+          email: document.getElementById('c-email').value.trim(),
+          message: document.getElementById('c-message').value.trim()
+        })
+      });
+      msg.textContent = data.message;
+      msg.classList.add('ok');
+      document.getElementById('contact-form').reset();
+    } catch (err) {
+      msg.textContent = err.message;
+      msg.classList.add('err');
+    } finally {
+      btn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>

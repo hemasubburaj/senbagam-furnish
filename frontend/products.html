@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Products — Senbagam Furniture</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="index.html" class="brand">Senbagam<span> Furniture</span></a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="products.html" class="active">Products</a></li>
+        <li><a href="testimonials.html">Testimonials</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-actions">
+      <a class="icon-btn" href="cart.html" aria-label="View cart">🛒<span class="cart-count" data-cart-count>0</span></a>
+      <button class="nav-toggle icon-btn" data-nav-toggle aria-label="Menu">☰</button>
+    </div>
+  </div>
+</header>
+
+<div class="material-rail"><div class="material-rail-track" data-material-rail></div></div>
+
+<section class="section" style="padding-bottom:0;">
+  <div class="wrap">
+    <span class="eyebrow">Full catalogue</span>
+    <h1 style="margin-top:8px; font-size:clamp(32px,4vw,48px);">Every piece we make</h1>
+    <p class="lede" style="margin-top:14px;">Filter by category or search by name — everything ships within 7–10 days.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:20px; flex-wrap:wrap; margin-bottom:24px;">
+      <div class="filter-bar" data-filter-bar>
+        <button class="filter-chip active" data-filter="">All</button>
+      </div>
+      <input type="search" id="search-input" placeholder="Search products…"
+        style="padding:10px 16px; border:1px solid var(--line); border-radius:999px; min-width:220px; font-family:inherit; background:var(--white);">
+    </div>
+    <p id="empty-state" class="lede" style="display:none;">No products match that search — try another term.</p>
+    <div class="product-grid" data-product-list></div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="brand" style="color:var(--linen);">Senbagam<span> Furniture</span></div>
+        <p style="margin-top:16px;">Solid-wood furniture and home goods, designed in-house and shipped across India.</p>
+      </div>
+      <div>
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="products.html">All products</a></li>
+          <li><a href="products.html?category=Seating">Seating</a></li>
+          <li><a href="products.html?category=Lighting">Lighting</a></li>
+          <li><a href="products.html?category=Decor">Decor</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About us</a></li>
+          <li><a href="testimonials.html">Testimonials</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Stay in touch</h4>
+        <p>Subscribe for new arrivals and studio notes. No spam.</p>
+        <form class="footer-form" data-newsletter-form>
+          <input type="email" placeholder="Email address" required>
+          <button type="submit">Subscribe</button>
+        </form>
+        <div class="form-msg"></div>
+      </div>
+    </div>
+    <div class="footer-note">
+      <span>© 2026 Senbagam Furniture. Established 1997, Tirupur.</span>
+      <span><a href="#">Privacy Policy</a> · <a href="#">Terms of Service</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="js/products.js"></script>
+</body>
+</html>

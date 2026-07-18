@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Cart — Senbagam Furniture</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .cart-table { width:100%; border-collapse:collapse; margin-bottom:32px; }
+  .cart-table th { text-align:left; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--taupe); padding-bottom:14px; border-bottom:1px solid var(--line); }
+  .cart-table td { padding:18px 0; border-bottom:1px solid var(--line); vertical-align:middle; }
+  .cart-item-info { display:flex; align-items:center; gap:16px; }
+  .cart-item-info img { width:64px; height:64px; object-fit:cover; background:var(--linen-deep); }
+  .cart-item-info .name { font-family: var(--font-display); font-size:16px; color:var(--moss); }
+  .cart-item-info .material { font-size:12px; color:var(--taupe); }
+  .qty-inline { display:flex; align-items:center; border:1px solid var(--line); width:fit-content; }
+  .qty-inline button { width:30px; height:34px; border:none; background:transparent; color:var(--moss); }
+  .qty-inline input { width:36px; text-align:center; border:none; border-left:1px solid var(--line); border-right:1px solid var(--line); height:34px; font-family:inherit; }
+  .remove-link { font-size:12px; color:var(--taupe); text-decoration:underline; }
+  .cart-summary { max-width:360px; margin-left:auto; background:var(--white); border:1px solid var(--line); padding:26px; }
+  .cart-summary-row { display:flex; justify-content:space-between; margin-bottom:12px; font-size:14px; color:var(--taupe); }
+  .cart-summary-total { display:flex; justify-content:space-between; font-family:var(--font-display); font-size:22px; color:var(--moss); padding-top:14px; border-top:1px solid var(--line); margin-bottom:22px; }
+  .cart-empty { text-align:center; padding:60px 0; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="index.html" class="brand">Senbagam<span> Furniture</span></a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="testimonials.html">Testimonials</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-actions">
+      <a class="icon-btn" href="cart.html" aria-label="View cart">🛒<span class="cart-count" data-cart-count>0</span></a>
+      <button class="nav-toggle icon-btn" data-nav-toggle aria-label="Menu">☰</button>
+    </div>
+  </div>
+</header>
+
+<section class="section">
+  <div class="wrap">
+    <span class="eyebrow">Step 1 of 2</span>
+    <h1 style="margin-top:8px; font-size:clamp(30px,3.6vw,42px);">Your cart</h1>
+
+    <div id="cart-has-items" style="margin-top:36px; display:none;">
+      <table class="cart-table">
+        <thead>
+          <tr><th>Product</th><th>Price</th><th>Quantity</th><th>Subtotal</th><th></th></tr>
+        </thead>
+        <tbody id="cart-rows"></tbody>
+      </table>
+
+      <div class="cart-summary">
+        <div class="cart-summary-row"><span>Subtotal</span><span id="cart-subtotal"></span></div>
+        <div class="cart-summary-row"><span>Shipping</span><span>Calculated at checkout</span></div>
+        <div class="cart-summary-total"><span>Total</span><span id="cart-total"></span></div>
+        <a href="checkout.html" class="btn btn-primary btn-block">Proceed to checkout</a>
+      </div>
+    </div>
+
+    <div id="cart-empty" class="cart-empty" style="display:none;">
+      <p class="lede" style="margin:0 auto 22px;">Your cart is empty right now.</p>
+      <a href="products.html" class="btn btn-outline">Browse products</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-note" style="border-top:none; padding-top:0;">
+      <span>© 2026 Senbagam Furniture. Established 1997, Tirupur.</span>
+      <a href="index.html">Back to home</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="js/cart.js"></script>
+</body>
+</html>

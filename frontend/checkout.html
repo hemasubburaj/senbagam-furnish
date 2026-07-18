@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout — Senbagam Furniture</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .checkout-layout { display:grid; grid-template-columns: 1.2fr 1fr; gap:50px; align-items:flex-start; }
+  .field { margin-bottom:18px; }
+  .field label { display:block; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--taupe); margin-bottom:8px; }
+  .field input, .field textarea {
+    width:100%; padding:12px 14px; border:1px solid var(--line); background:var(--white);
+    font-family:inherit; font-size:14px; border-radius:var(--radius);
+  }
+  .field textarea { min-height:90px; resize:vertical; }
+  .order-summary { background:var(--white); border:1px solid var(--line); padding:26px; }
+  .order-line { display:flex; justify-content:space-between; font-size:14px; padding:10px 0; border-bottom:1px solid var(--line); }
+  .order-total { display:flex; justify-content:space-between; font-family:var(--font-display); font-size:22px; padding-top:16px; color:var(--moss); }
+  #checkout-error { color:#B23A3A; font-size:13px; margin-top:10px; min-height:16px; }
+  #checkout-success { display:none; text-align:center; padding:60px 0; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="index.html" class="brand">Senbagam<span> Furniture</span></a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="testimonials.html">Testimonials</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-actions">
+      <a class="icon-btn" href="cart.html" aria-label="View cart">🛒<span class="cart-count" data-cart-count>0</span></a>
+      <button class="nav-toggle icon-btn" data-nav-toggle aria-label="Menu">☰</button>
+    </div>
+  </div>
+</header>
+
+<section class="section">
+  <div class="wrap">
+    <div id="checkout-form-wrap">
+      <span class="eyebrow">Step 2 of 2</span>
+      <h1 style="margin-top:8px; font-size:clamp(30px,3.6vw,42px);">Checkout</h1>
+
+      <div class="checkout-layout" style="margin-top:36px;">
+        <form id="checkout-form">
+          <div class="field">
+            <label for="customer_name">Full name</label>
+            <input type="text" id="customer_name" required>
+          </div>
+          <div class="field">
+            <label for="customer_email">Email</label>
+            <input type="email" id="customer_email" required>
+          </div>
+          <div class="field">
+  <label for="customer_phone">Mobile number</label>
+  <input type="tel" id="customer_phone" pattern="[0-9]{10}" maxlength="10" placeholder="10-digit mobile number" required>
+</div>
+          <div class="field">
+            <label for="address">Shipping address</label>
+            <textarea id="address" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" id="place-order-btn">Place order</button>
+          <div id="checkout-error"></div>
+        </form>
+
+        <div class="order-summary">
+          <h3 style="font-size:16px; margin-bottom:16px;">Order summary</h3>
+          <div id="order-lines"></div>
+          <div class="order-total"><span>Total</span><span id="order-total"></span></div>
+        </div>
+      </div>
+    </div>
+
+
+    
+    <div id="checkout-success">
+      <span class="eyebrow">Order confirmed</span>
+      <h1 style="margin-top:12px; font-size:clamp(28px,3.4vw,40px);">Thank you, <span id="success-name"></span>.</h1>
+      <p class="lede" style="margin:16px auto 26px;">Order #<span id="success-id"></span> has been placed. A confirmation has been recorded for <span id="success-email"></span>.</p>
+   
+      <a href="products.html" class="btn btn-outline">Continue shopping</a>
+<a href="track-order.html" class="btn btn-primary">Track this order</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-note" style="border-top:none; padding-top:0;">
+      <span>© 2026 Senbagam Furniture. Established 1997, Tirupur.</span>
+      <a href="index.html">Back to home</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="js/checkout.js"></script>
+</body>
+</html>

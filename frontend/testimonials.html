@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Testimonials — Senbagam Furniture</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .t-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:28px; margin-top:40px; }
+  .t-card { background:var(--white); border:1px solid var(--line); padding:28px; }
+  .t-stars { color:var(--brass); letter-spacing:2px; margin-bottom:14px; font-size:14px; }
+  .t-quote { font-family:var(--font-display); font-size:17px; line-height:1.5; margin:0 0 20px; color: var(--moss); }
+  .t-name { font-weight:700; font-size:14px; }
+  .t-role { font-size:12px; color:var(--taupe); }
+  @media (max-width: 900px){ .t-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="index.html" class="brand">Senbagam<span> Furniture</span></a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="testimonials.html" class="active">Testimonials</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-actions">
+      <a class="icon-btn" href="cart.html" aria-label="View cart">🛒<span class="cart-count" data-cart-count>0</span></a>
+      <button class="nav-toggle icon-btn" data-nav-toggle aria-label="Menu">☰</button>
+    </div>
+  </div>
+</header>
+
+<section class="section">
+  <div class="wrap">
+    <span class="eyebrow">Word of mouth</span>
+    <h1 style="margin-top:8px; font-size:clamp(32px,4vw,48px);">What customers tell us</h1>
+    <p class="lede" style="margin-top:14px;">Real notes from households that have lived with our pieces for months, not just unboxed them.</p>
+    <div class="t-grid" data-testimonials-page></div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-note" style="border-top:none; padding-top:0;">
+      <span>© 2026 Senbagam Furniture. Established 1997, Tirupur.</span>
+      <a href="index.html">Back to home</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    const el = document.querySelector('[data-testimonials-page]');
+    try {
+      const items = await api('/testimonials');
+      el.innerHTML = items.map(t => `
+        <div class="t-card">
+          <div class="t-stars">${'★'.repeat(t.rating)}${'☆'.repeat(5 - t.rating)}</div>
+          <p class="t-quote">"${t.quote}"</p>
+          <div class="t-name">${t.name}</div>
+          <div class="t-role">${t.role}</div>
+        </div>`).join('');
+    } catch {
+      el.innerHTML = '<p class="lede">Could not load testimonials right now.</p>';
+    }
+  });
+</script>
+</body>
+</html>
