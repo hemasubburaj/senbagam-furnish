@@ -1,17 +1,22 @@
 // ---------------------------------------------------------
 // Furnish — shared front-end logic
 // ---------------------------------------------------------
-const API_BASE = '/api';
-const CART_KEY = 'furnish_cart_v1';
+const API_BASE = "https://senbagam-furnish.onrender.com/api";
+const CART_KEY = "furnish_cart_v1";
 
 /* ---------- API helper ---------- */
 async function api(path, options = {}) {
   const res = await fetch(`${API_BASE}${path}`, {
-    headers: { 'Content-Type': 'application/json' },
+    headers: { "Content-Type": "application/json" },
     ...options
   });
+
   const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.error || 'Something went wrong.');
+
+  if (!res.ok) {
+    throw new Error(data.error || "Something went wrong.");
+  }
+
   return data;
 }
 
