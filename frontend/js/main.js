@@ -111,7 +111,7 @@ function initScrollReveal() {
 function initNewsletterForm() {
   const form = document.querySelector('[data-newsletter-form]');
   if (!form) return;
-  const msg = form.querySelector('.form-msg');
+  const msg = form.parentElement.querySelector('.form-msg');
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = form.querySelector('input[type="email"]').value.trim();

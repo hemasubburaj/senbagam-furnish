@@ -26,6 +26,14 @@
   .combo-total-row { display:flex; justify-content:space-between; align-items:baseline; padding:18px 0 6px; }
   .combo-total-row .label { font-size:13px; color:var(--taupe); }
   .combo-total-row .amount { font-family:var(--font-display); font-size:26px; color:var(--moss); }
+
+  @media (max-width: 600px) {
+  .combo-slot { flex-wrap: wrap; }
+  .combo-slot-label { width: 100%; }
+  .combo-slot-select { width: 100%; }
+  .combo-slot-price { width: auto; margin-left: auto; }
+  .pd-actions { flex-direction: column; align-items: stretch; }
+}
 </style>
 </head>
 <body>
