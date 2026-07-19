@@ -109,19 +109,39 @@ router.get('/messages', async (req, res) => {
 });
 
 /* ---------- quick stats for dashboard header ---------- */
+
+
 router.get('/stats', async (req, res) => {
   try {
-    const [productCount, orderCount, subscriberCount, revenueAgg] = await Promise.all([
+    const fourteenDaysAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000);
+    fourteenDaysAgo.setHours(0, 0, 0, 0);
+
+    const [productCount, orderCount, subscriberCount, revenueAgg, ordersByDay, statusBreakdown] = await Promise.all([
       Product.countDocuments(),
       Order.countDocuments(),
       NewsletterSubscriber.countDocuments(),
-      Order.aggregate([{ $group: { _id: null, total: { $sum: '$total' } } }])
+      Order.aggregate([{ $group: { _id: null, total: { $sum: '$total' } } }]),
+      Order.aggregate([
+        { $match: { created_at: { $gte: fourteenDaysAgo } } },
+        { $group: {
+            _id: { $dateToString: { format: '%Y-%m-%d', date: '$created_at' } },
+            count: { $sum: 1 },
+            revenue: { $sum: '$total' }
+        }},
+        { $sort: { _id: 1 } }
+      ]),
+      Order.aggregate([
+        { $group: { _id: '$status', count: { $sum: 1 } } }
+      ])
     ]);
+
     res.json({
       productCount,
       orderCount,
       subscriberCount,
-      revenue: revenueAgg[0]?.total || 0
+      revenue: revenueAgg[0]?.total || 0,
+      ordersByDay,
+      statusBreakdown
     });
   } catch (err) {
     res.status(500).json({ error: 'Could not load stats.' });
@@ -129,3 +149,4 @@ router.get('/stats', async (req, res) => {
 });
 
 module.exports = router;
+
