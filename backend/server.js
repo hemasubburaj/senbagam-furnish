@@ -10,8 +10,10 @@ const testimonialsRouter = require('./routes/testimonials');
 const newsletterRouter = require('./routes/newsletter');
 const contactRouter = require('./routes/contact');
 const ordersRouter = require('./routes/orders');
+const paymentRouter = require('./routes/payment');
 const adminRouter = require('./routes/admin');
 const adminApiRouter = require('./routes/adminApi');
+
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -40,6 +42,8 @@ app.use('/api/testimonials', testimonialsRouter);
 app.use('/api/newsletter', newsletterRouter);
 app.use('/api/contact', contactRouter);
 app.use('/api/orders', ordersRouter);
+app.use('/api/payment', paymentRouter);
+
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
@@ -47,8 +51,6 @@ app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 const FRONTEND_DIR = path.join(__dirname, '..', 'frontend');
 app.use(express.static(FRONTEND_DIR));
 
-// Fallback to index.html for direct navigation to known pages (not strictly needed
-// since these are static .html files, but kept for clean 404 handling on unknown routes)
 app.use((req, res) => {
   res.status(404).sendFile(path.join(FRONTEND_DIR, '404.html'));
 });
