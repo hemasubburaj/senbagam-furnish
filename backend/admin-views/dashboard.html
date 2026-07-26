@@ -49,6 +49,33 @@
   .modal-actions { display:flex; justify-content:flex-end; gap:10px; margin-top:18px; }
   select.status-select { padding:5px 8px; font-size:12px; border:1px solid var(--line); }
 
+  /* ---- orders (advanced) ---- */
+  .orders-toolbar { display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:20px; }
+  .orders-search { flex:1; min-width:220px; padding:10px 14px; border:1px solid var(--line); border-radius:2px; font-size:13px; font-family:inherit; }
+  .orders-filters { display:flex; gap:6px; flex-wrap:wrap; }
+  .order-filter-chip { padding:7px 14px; border:1px solid var(--line); border-radius:999px; background:#fff; font-size:11px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--moss); cursor:pointer; }
+  .order-filter-chip.active { background:var(--moss); color:var(--linen); border-color:var(--moss); }
+  .order-empty { color:var(--taupe); font-size:13px; padding:24px 0; }
+
+  .order-card { background:#fff; border:1px solid var(--line); margin-bottom:16px; overflow:hidden; }
+  .order-card-head { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; padding:16px 20px; background:var(--linen-deep); flex-wrap:wrap; }
+  .order-card-id { font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--taupe); }
+  .order-card-date { font-size:12px; color:var(--taupe); }
+  .order-card-total { font-family:var(--font-display); font-size:20px; color:var(--moss); }
+  .order-card-body { display:grid; grid-template-columns:1.1fr 1fr 1fr; gap:0; }
+  .order-card-col { padding:16px 20px; border-right:1px solid var(--line); }
+  .order-card-col:last-child { border-right:none; }
+  .order-card-label { font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--taupe); margin-bottom:8px; }
+  .order-customer-name { font-weight:700; font-size:15px; color:var(--moss); margin-bottom:4px; }
+  .order-customer-detail { font-size:12px; color:var(--taupe); line-height:1.6; }
+  .order-address { font-size:13px; line-height:1.5; }
+  .order-items-list { font-size:13px; line-height:1.8; }
+  .order-card-footer { display:flex; justify-content:space-between; align-items:center; padding:12px 20px; border-top:1px solid var(--line); flex-wrap:wrap; gap:10px; }
+  .payment-badge { font-size:11px; font-weight:700; padding:5px 12px; border-radius:999px; }
+  .payment-badge.paid { background:#DCEFDD; color:#2E7D32; }
+  .payment-badge.unpaid { background:var(--linen-deep); color:var(--taupe); }
+  @media (max-width: 900px) { .order-card-body { grid-template-columns:1fr; } .order-card-col { border-right:none; border-bottom:1px solid var(--line); } }
+
   @media (max-width: 720px) {
   .layout { flex-direction: column; }
   nav.side { width: 100%; display: flex; overflow-x: auto; border-right: none; border-bottom: 1px solid var(--line); padding: 0; }
@@ -113,11 +140,18 @@
 
     <section id="panel-orders" class="panel">
       <h2>Orders</h2>
-      <table>
-        <thead><tr><th>#</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th><th>Placed</th></tr></thead>
-
-        <tbody id="orders-table"></tbody>
-      </table>
+      <div class="orders-toolbar">
+        <input type="text" class="orders-search" id="orders-search" placeholder="Search by name, email, phone or order ID…">
+        <div class="orders-filters" id="orders-filters">
+          <button class="order-filter-chip active" data-status="">All</button>
+          <button class="order-filter-chip" data-status="pending">Pending</button>
+          <button class="order-filter-chip" data-status="processing">Processing</button>
+          <button class="order-filter-chip" data-status="shipped">Shipped</button>
+          <button class="order-filter-chip" data-status="delivered">Delivered</button>
+          <button class="order-filter-chip" data-status="cancelled">Cancelled</button>
+        </div>
+      </div>
+      <div id="orders-list"></div>
     </section>
 
     <section id="panel-newsletter" class="panel">
@@ -347,27 +381,89 @@ document.getElementById('product-form').addEventListener('submit', async (e) => 
 });
 
 /* ---------- orders ---------- */
+let allOrders = [];
+let orderStatusFilter = '';
+let orderSearchTerm = '';
+
 async function loadOrders() {
-  const orders = await api('/orders');
+  allOrders = await api('/orders');
+  renderOrders();
 
+  document.getElementById('orders-search').oninput = (e) => {
+    orderSearchTerm = e.target.value.trim().toLowerCase();
+    renderOrders();
+  };
 
+  document.getElementById('orders-filters').onclick = (e) => {
+    const chip = e.target.closest('.order-filter-chip');
+    if (!chip) return;
+    document.querySelectorAll('.order-filter-chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    orderStatusFilter = chip.dataset.status;
+    renderOrders();
+  };
+}
 
-  document.getElementById('orders-table').innerHTML = orders.map(o => `
-    <tr>
-      <td>#${o.id}</td>
-<td>${o.customer_name}<br><span style="color:var(--taupe); font-size:11px;">${o.customer_email} · ${o.customer_phone || '—'}</span></td>
-      <td>${o.items.map(i => `${i.name} × ${i.qty}`).join('<br>')}</td>
-      <td>$${o.total.toFixed(2)}</td>
-      <td>
+function renderOrders() {
+  let orders = allOrders;
+
+  if (orderStatusFilter) {
+    orders = orders.filter(o => o.status === orderStatusFilter);
+  }
+  if (orderSearchTerm) {
+    orders = orders.filter(o =>
+      o.customer_name.toLowerCase().includes(orderSearchTerm) ||
+      o.customer_email.toLowerCase().includes(orderSearchTerm) ||
+      (o.customer_phone || '').includes(orderSearchTerm) ||
+      o.id.toLowerCase().includes(orderSearchTerm)
+    );
+  }
+
+  const listEl = document.getElementById('orders-list');
+
+  if (orders.length === 0) {
+    listEl.innerHTML = '<p class="order-empty">No orders match this search/filter.</p>';
+    return;
+  }
+
+  listEl.innerHTML = orders.map(o => `
+    <div class="order-card">
+      <div class="order-card-head">
+        <div>
+          <div class="order-card-id">Order #${o.id}</div>
+          <div class="order-card-date">Placed ${new Date(o.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+        </div>
+        <div class="order-card-total">₹${o.total.toLocaleString('en-IN')}</div>
+      </div>
+      <div class="order-card-body">
+        <div class="order-card-col">
+          <div class="order-card-label">Customer</div>
+          <div class="order-customer-name">${o.customer_name}</div>
+          <div class="order-customer-detail">${o.customer_email}<br>${o.customer_phone || '—'}</div>
+        </div>
+        <div class="order-card-col">
+          <div class="order-card-label">Delivery address</div>
+          <div class="order-address">${(o.address || '—').replace(/\n/g, '<br>')}</div>
+        </div>
+        <div class="order-card-col">
+          <div class="order-card-label">Items</div>
+          <div class="order-items-list">${o.items.map(i => `${i.name} × ${i.qty}`).join('<br>')}</div>
+        </div>
+      </div>
+      <div class="order-card-footer">
+        <span class="payment-badge ${o.payment_status === 'paid' ? 'paid' : 'unpaid'}">
+          ${o.payment_status === 'paid' ? '✓ Paid via Razorpay' : 'Not paid online'}
+        </span>
         <select class="status-select" data-order="${o.id}">
-          ${['pending','processing','shipped','delivered','cancelled'].map(s => `<option value="${s}" ${s === o.status ? 'selected' : ''}>${s}</option>`).join('')}
+          ${['pending','processing','shipped','delivered','cancelled'].map(s => `<option value="${s}" ${s === o.status ? 'selected' : ''}>${s.charAt(0).toUpperCase() + s.slice(1)}</option>`).join('')}
         </select>
-      </td>
-      <td>${new Date(o.created_at).toLocaleDateString()}</td>
-    </tr>`).join('');
+      </div>
+    </div>`).join('');
 
   document.querySelectorAll('.status-select').forEach(sel => sel.addEventListener('change', async () => {
     await api(`/orders/${sel.dataset.order}/status`, { method: 'PUT', body: JSON.stringify({ status: sel.value }) });
+    const order = allOrders.find(o => o.id === sel.dataset.order);
+    if (order) order.status = sel.value;
   }));
 }
 
