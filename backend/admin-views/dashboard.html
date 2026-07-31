@@ -131,6 +131,7 @@
       <h2 style="display:flex; justify-content:space-between; align-items:center;">
         Products
         <button class="btn primary" id="new-product-btn">+ New product</button>
+        <button class="btn" id="new-combo-btn" type="button" style="margin-left:8px; background:#2E7D32; color:#fff; border-color:#2E7D32;">+ New Combo</button>
       </h2>
       <table>
         <thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Featured</th><th></th></tr></thead>
@@ -174,7 +175,7 @@
 
 <!-- Product create/edit modal -->
 <div class="modal-bg" id="product-modal-bg">
-  <div class="modal">
+  <div class="modal" style="max-width:580px;">
     <h3 id="product-modal-title">New product</h3>
     <form id="product-form">
       <input type="hidden" id="p-id">
@@ -183,13 +184,17 @@
         <div class="field"><label>Slug</label><input type="text" id="p-slug" required></div>
       </div>
       <div class="row2">
-        <div class="field"><label>Category</label><input type="text" id="p-category" required></div>
+        <div class="field"><label>Category</label><input type="text" id="p-category" required placeholder="Bedroom, Living Room, Pooja, Combos..."></div>
         <div class="field"><label>Material</label><input type="text" id="p-material" required></div>
+      </div>
+      <div class="field">
+        <label>Type (for combo swaps, e.g. Cot, Wardrobe, Sofa. Leave blank for combo products.)</label>
+        <input type="text" id="p-type" placeholder="e.g. Cot">
       </div>
       <div class="field"><label>Description</label><textarea id="p-description" required></textarea></div>
       <div class="row2">
-        <div class="field"><label>Price ($)</label><input type="number" step="0.01" id="p-price" required></div>
-        <div class="field"><label>Compare-at price ($, optional)</label><input type="number" step="0.01" id="p-compare"></div>
+        <div class="field"><label>Price (₹)</label><input type="number" step="0.01" id="p-price" required></div>
+        <div class="field"><label>Compare-at price (₹, optional)</label><input type="number" step="0.01" id="p-compare"></div>
       </div>
       <div class="row2">
         <div class="field"><label>Stock</label><input type="number" id="p-stock" value="20"></div>
@@ -198,7 +203,14 @@
       <div class="field">
         <label><input type="checkbox" id="p-featured" style="width:auto; margin-right:8px;">Featured on homepage</label>
       </div>
-      <div id="product-error" style="color:#B23A3A; font-size:12px;"></div>
+
+      <div id="combo-builder-admin" style="display:none; border-top:1px solid var(--line); margin-top:6px; padding-top:16px;">
+        <label style="display:block; margin-bottom:10px;">Combo items — customers can swap each for another product of the same type</label>
+        <div id="combo-items-rows"></div>
+        <button type="button" class="btn btn-sm" id="combo-add-item-btn" style="margin-top:4px;">+ Add item</button>
+      </div>
+
+      <div id="product-error" style="color:#B23A3A; font-size:12px; margin-top:12px;"></div>
       <div class="modal-actions">
         <button type="button" class="btn" id="product-cancel-btn">Cancel</button>
         <button type="submit" class="btn primary">Save product</button>
@@ -335,13 +347,56 @@ async function loadProducts() {
   }));
 }
 
-function openProductModal(p) {
+let comboOptionProducts = [];
+
+async function loadComboOptionProducts() {
+  const all = await api('/products');
+  comboOptionProducts = all.filter(item => item.category !== 'Combos');
+}
+
+function comboItemRowHtml(slot) {
+  const options = comboOptionProducts.map(item =>
+    `<option value="${item.slug}" data-type="${item.type || ''}" ${slot && slot.defaultSlug === item.slug ? 'selected' : ''}>${item.name} (${item.type || 'no type set'})</option>`
+  ).join('');
+  return `
+    <div class="combo-item-row" style="display:flex; gap:8px; margin-bottom:8px; align-items:center;">
+      <input type="text" class="combo-slot-label-input" placeholder="Slot label (e.g. Cot)" value="${slot ? slot.slotLabel : ''}" style="flex:1; padding:8px 10px; border:1px solid var(--line); font-size:13px;">
+      <select class="combo-slot-product-select" style="flex:1.6; padding:8px 10px; border:1px solid var(--line); font-size:13px;">
+        <option value="">-- choose product --</option>
+        ${options}
+      </select>
+      <button type="button" class="btn btn-sm combo-remove-row-btn" style="color:#B23A3A; padding:6px 10px;">×</button>
+    </div>`;
+}
+
+function addComboItemRow(slot) {
+  const container = document.getElementById('combo-items-rows');
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = comboItemRowHtml(slot || null);
+  container.appendChild(wrapper.firstElementChild);
+}
+
+document.getElementById('combo-items-rows').addEventListener('click', (e) => {
+  if (e.target.classList.contains('combo-remove-row-btn')) {
+    e.target.closest('.combo-item-row').remove();
+  }
+});
+
+document.getElementById('combo-add-item-btn').addEventListener('click', () => addComboItemRow());
+
+document.getElementById('p-category').addEventListener('input', (e) => {
+  const isCombo = e.target.value.trim().toLowerCase() === 'combos';
+  document.getElementById('combo-builder-admin').style.display = isCombo ? 'block' : 'none';
+});
+
+async function openProductModal(p) {
   document.getElementById('product-error').textContent = '';
-  document.getElementById('product-modal-title').textContent = p ? 'Edit product' : 'New product';
+  document.getElementById('product-modal-title').textContent = (p && p.id) ? 'Edit product' : (p && p.category === 'Combos' ? 'New combo' : 'New product');
   document.getElementById('p-id').value = p ? p.id : '';
   document.getElementById('p-name').value = p ? p.name : '';
   document.getElementById('p-slug').value = p ? p.slug : '';
   document.getElementById('p-category').value = p ? p.category : '';
+  document.getElementById('p-type').value = p ? (p.type || '') : '';
   document.getElementById('p-material').value = p ? p.material : '';
   document.getElementById('p-description').value = p ? p.description : '';
   document.getElementById('p-price').value = p ? p.price : '';
@@ -349,19 +404,38 @@ function openProductModal(p) {
   document.getElementById('p-stock').value = p ? p.stock : 20;
   document.getElementById('p-image').value = p ? p.image : '';
   document.getElementById('p-featured').checked = !!(p && p.featured);
+
+  await loadComboOptionProducts();
+  document.getElementById('combo-items-rows').innerHTML = '';
+  const isCombo = !!(p && p.category === 'Combos');
+  document.getElementById('combo-builder-admin').style.display = isCombo ? 'block' : 'none';
+  if (isCombo && Array.isArray(p.comboItems)) {
+    p.comboItems.forEach(slot => addComboItemRow(slot));
+  }
+
   document.getElementById('product-modal-bg').classList.add('open');
 }
 
 document.getElementById('new-product-btn').addEventListener('click', () => openProductModal(null));
+document.getElementById('new-combo-btn').addEventListener('click', async () => {
+  await openProductModal({
+    id: '', name: '', slug: '', category: 'Combos', type: '',
+    material: '', description: '', price: '', compare_at_price: null,
+    stock: 20, image: '', featured: false, comboItems: []
+  });
+  addComboItemRow();
+});
 document.getElementById('product-cancel-btn').addEventListener('click', () => document.getElementById('product-modal-bg').classList.remove('open'));
 
 document.getElementById('product-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const id = document.getElementById('p-id').value;
+  const category = document.getElementById('p-category').value.trim();
   const payload = {
     name: document.getElementById('p-name').value.trim(),
     slug: document.getElementById('p-slug').value.trim(),
-    category: document.getElementById('p-category').value.trim(),
+    category: category,
+    type: document.getElementById('p-type').value.trim() || undefined,
     material: document.getElementById('p-material').value.trim(),
     description: document.getElementById('p-description').value.trim(),
     price: parseFloat(document.getElementById('p-price').value),
@@ -370,6 +444,22 @@ document.getElementById('product-form').addEventListener('submit', async (e) => 
     image: document.getElementById('p-image').value.trim() || '/images/products/placeholder.svg',
     featured: document.getElementById('p-featured').checked
   };
+
+  if (category.toLowerCase() === 'combos') {
+    const rows = document.querySelectorAll('#combo-items-rows .combo-item-row');
+    const comboItems = [];
+    rows.forEach(row => {
+      const label = row.querySelector('.combo-slot-label-input').value.trim();
+      const select = row.querySelector('.combo-slot-product-select');
+      const slug = select.value;
+      const type = select.selectedOptions[0] ? select.selectedOptions[0].dataset.type : '';
+      if (label && slug) {
+        comboItems.push({ slotLabel: label, optionType: type, defaultSlug: slug });
+      }
+    });
+    payload.comboItems = comboItems;
+  }
+
   try {
     if (id) await api(`/products/${id}`, { method: 'PUT', body: JSON.stringify(payload) });
     else await api('/products', { method: 'POST', body: JSON.stringify(payload) });

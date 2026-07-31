@@ -21,7 +21,7 @@ router.get('/products', async (req, res) => {
 
 router.post('/products', async (req, res) => {
   try {
-    const { slug, name, category, material, description, price, compare_at_price, image, featured, stock } = req.body;
+    const { slug, name, category, material, description, price, compare_at_price, image, featured, stock, type, comboItems } = req.body;
     if (!slug || !name || !category || !material || !description || price == null) {
       return res.status(400).json({ error: 'Missing required product fields.' });
     }
@@ -30,7 +30,9 @@ router.post('/products', async (req, res) => {
       compare_at_price: compare_at_price || null,
       image: image || '/images/products/placeholder.svg',
       featured: !!featured,
-      stock: stock ?? 20
+      stock: stock ?? 20,
+      type: type || undefined,
+      comboItems: Array.isArray(comboItems) && comboItems.length > 0 ? comboItems : undefined
     });
     res.status(201).json(product);
   } catch (err) {
