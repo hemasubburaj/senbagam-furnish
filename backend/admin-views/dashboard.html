@@ -173,7 +173,7 @@
     <form id="product-form">
       <input type="hidden" id="p-id">
       <div class="row2">
-        <div class="field"><label>Name</label><input type="text" id="p-name" required></div>
+        <div class="field"><label>Name</label><input type="text" id="p-name" required oninput="document.getElementById('p-slug').value = this.value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');"></div>
         <div class="field"><label>Slug</label><input type="text" id="p-slug" required></div>
       </div>
       <div class="row2">
@@ -408,7 +408,10 @@ async function openProductModal(p) {
   document.getElementById('product-modal-bg').classList.add('open');
 }
 
-document.getElementById('new-product-btn').addEventListener('click', () => openProductModal(null));
+document.getElementById('new-product-btn').addEventListener('click', () => {
+  document.getElementById('p-type').closest('.field').style.display = 'block';
+  openProductModal(null);
+});
 document.getElementById('new-combo-btn').addEventListener('click', async () => {
   await openProductModal({
     id: '', name: '', slug: '', category: 'Combos', type: '',
@@ -416,6 +419,7 @@ document.getElementById('new-combo-btn').addEventListener('click', async () => {
     stock: 20, image: '', featured: false, comboItems: []
   });
   addComboItemRow();
+  document.getElementById('p-type').closest('.field').style.display = 'none';
 });
 document.getElementById('product-cancel-btn').addEventListener('click', () => document.getElementById('product-modal-bg').classList.remove('open'));
 
