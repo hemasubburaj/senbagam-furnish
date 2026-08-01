@@ -223,7 +223,7 @@ h1, h2, h3, h4 {
 .site-footer { background: var(--moss); color: var(--linen); padding: 64px 0 28px; margin-top: 96px; }
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.3fr 1fr 1fr 1.2fr;
+  grid-template-columns: 1.3fr 1fr 1fr;
   gap: 40px;
   padding-bottom: 48px;
   border-bottom: 1px solid rgba(245,240,230,0.14);
