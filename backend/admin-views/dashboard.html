@@ -106,7 +106,6 @@
     <button data-tab="overview" class="active">Overview</button>
     <button data-tab="products">Products</button>
     <button data-tab="orders">Orders</button>
-    <button data-tab="newsletter">Newsletter</button>
     <button data-tab="messages">Messages</button>
   </nav>
 
@@ -155,13 +154,7 @@
       <div id="orders-list"></div>
     </section>
 
-    <section id="panel-newsletter" class="panel">
-      <h2>Newsletter subscribers</h2>
-      <table>
-        <thead><tr><th>Email</th><th>Subscribed</th></tr></thead>
-        <tbody id="newsletter-table"></tbody>
-      </table>
-    </section>
+    
 
     <section id="panel-messages" class="panel">
       <h2>Contact messages</h2>
@@ -243,7 +236,6 @@ function loadTab(tab) {
   if (tab === 'overview') loadStats();
   if (tab === 'products') loadProducts();
   if (tab === 'orders') loadOrders();
-  if (tab === 'newsletter') loadNewsletter();
   if (tab === 'messages') loadMessages();
 }
 
@@ -558,12 +550,7 @@ function renderOrders() {
 }
 
 /* ---------- newsletter ---------- */
-async function loadNewsletter() {
-  const rows = await api('/newsletter');
-  document.getElementById('newsletter-table').innerHTML = rows.map(r => `
-    <tr><td>${r.email}</td><td>${new Date(r.created_at).toLocaleDateString()}</td></tr>`).join('')
-    || '<tr><td colspan="2" style="color:var(--taupe);">No subscribers yet.</td></tr>';
-}
+
 
 /* ---------- messages ---------- */
 async function loadMessages() {
