@@ -16,7 +16,7 @@
   .qty-inline { display:flex; align-items:center; border:1px solid var(--line); width:fit-content; }
   .qty-inline button { width:30px; height:34px; border:none; background:transparent; color:var(--moss); }
   .qty-inline input { width:36px; text-align:center; border:none; border-left:1px solid var(--line); border-right:1px solid var(--line); height:34px; font-family:inherit; }
-  .remove-link { font-size:12px; color:var(--taupe); text-decoration:underline; }
+  .remove-link { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; color:#B23A3A; background:transparent; border:1px solid #B23A3A; padding:7px 16px; border-radius:999px; cursor:pointer; transition:background 0.15s ease, color 0.15s ease; } .remove-link:hover { background:#B23A3A; color:#fff; }
   .cart-summary { max-width:360px; margin-left:auto; background:var(--white); border:1px solid var(--line); padding:26px; }
   .cart-summary-row { display:flex; justify-content:space-between; margin-bottom:12px; font-size:14px; color:var(--taupe); }
   .cart-summary-total { display:flex; justify-content:space-between; font-family:var(--font-display); font-size:22px; color:var(--moss); padding-top:14px; border-top:1px solid var(--line); margin-bottom:22px; }
@@ -83,9 +83,43 @@
 
 <footer class="site-footer">
   <div class="wrap">
-    <div class="footer-note" style="border-top:none; padding-top:0;">
+    <div class="footer-grid">
+      <div>
+        <div class="brand" style="color:var(--linen);">Senbagam<span> Furniture</span></div>
+        <p style="margin-top:16px;">Solid-wood furniture and home goods, designed in-house and shipped across India.</p>
+      </div>
+      <div>
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="products.html">All products</a></li>
+          <li><a href="products.html?category=Combos">Combos</a></li>
+          <li><a href="products.html?category=Bedroom">Bedroom</a></li>
+          <li><a href="products.html?category=Living%20Room">Living Room</a></li>
+          <li><a href="products.html?category=Pooja">Pooja</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About us</a></li>
+          <li><a href="testimonials.html">Testimonials</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="track-order.html">Track order</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Stay in touch</h4>
+        <p>Subscribe for new arrivals and studio notes. No spam.</p>
+        <form class="footer-form" data-newsletter-form>
+          <input type="email" placeholder="Email address" required>
+          <button type="submit">Subscribe</button>
+        </form>
+        <div class="form-msg"></div>
+      </div>
+    </div>
+    <div class="footer-note">
       <span>© 2026 Senbagam Furniture. Established 1997, Tirupur.</span>
-      <a href="index.html">Back to home</a>
+      <span><a href="#">Privacy Policy</a> · <a href="#">Terms of Service</a></span>
     </div>
   </div>
 </footer>
