@@ -28,15 +28,7 @@
     .checkout-layout { grid-template-columns: 1fr; gap: 32px; }
     .order-summary { order: -1; }
   }
-
-  .payment-options { display:flex; flex-direction:column; gap:10px; }
-  .payment-option { display:flex; align-items:center; gap:10px; border:1px solid var(--line); padding:12px 14px; border-radius:var(--radius); cursor:pointer; }
-  .payment-option input { width:auto; margin:0; }
-  .payment-option.selected { border-color:var(--moss); background:var(--linen-deep); }
-  .upi-box { display:none; margin-top:16px; padding:18px; border:1px dashed var(--line); text-align:center; background:var(--linen-deep); }
-  .upi-box img { width:180px; height:180px; margin:0 auto 12px; display:block; }
-  .upi-box .upi-id { font-weight:700; color:var(--moss); }
-  .upi-note { font-size:12px; color:var(--taupe); margin-top:10px; }
+  .cod-note { display:flex; align-items:center; gap:10px; border:1px solid var(--line); padding:14px 16px; border-radius:var(--radius); background:var(--linen-deep); font-size:14px; color:var(--moss); }
 </style>
 </head>
 <body>
@@ -90,26 +82,8 @@
             <textarea id="address" placeholder="House/flat no., street, area, city, district, pincode" required></textarea>
           </div>
 
-          <div class="checkout-section-title second">Payment method</div>
-          <div class="payment-options">
-            <label class="payment-option" id="option-cod">
-              <input type="radio" name="payment_method" value="COD" checked>
-              <span>Cash on Delivery</span>
-            </label>
-            <label class="payment-option" id="option-upi">
-              <input type="radio" name="payment_method" value="UPI">
-              <span>UPI — Scan &amp; Pay</span>
-            </label>
-          </div>
-          <div class="upi-box" id="upi-box">
-            <img id="upi-qr-img" src="" alt="UPI QR code">
-            <div class="upi-id" id="upi-id-display"></div>
-            <p class="upi-note">Scan this code in any UPI app (GPay, PhonePe, Paytm) and pay the exact amount shown.</p>
-            <label style="display:flex; align-items:center; gap:8px; margin-top:14px; font-size:13px; cursor:pointer;">
-              <input type="checkbox" id="upi-paid-confirm" style="width:auto; margin:0;">
-              <span>I have completed the payment</span>
-            </label>
-          </div>
+          <div class="checkout-section-title second">Payment</div>
+          <div class="cod-note">💵 Cash on Delivery — pay when your order arrives.</div>
 
           <button type="submit" class="btn btn-primary" id="place-order-btn" style="margin-top:22px;">Place order</button>
           <div id="checkout-error"></div>

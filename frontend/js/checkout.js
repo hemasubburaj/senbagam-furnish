@@ -1,5 +1,3 @@
-const UPI_ID = 'yourupiid@okhdfcbank'; // <-- CHANGE THIS to your real UPI ID (e.g. 9876543210@okicici)
-
 function renderOrderSummary() {
   const items = Cart.read();
   const linesEl = document.getElementById('order-lines');
@@ -18,54 +16,24 @@ function showSuccess(order, customerName, customerEmail) {
   document.getElementById('success-email').textContent = customerEmail;
 }
 
-function updateUpiBox() {
-  const selected = document.querySelector('input[name="payment_method"]:checked').value;
-  const upiBox = document.getElementById('upi-box');
-  document.getElementById('option-cod').classList.toggle('selected', selected === 'COD');
-  document.getElementById('option-upi').classList.toggle('selected', selected === 'UPI');
-
-  if (selected === 'UPI') {
-    const amount = Cart.total().toFixed(2);
-    const upiLink = `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent('Senbagam Furniture')}&am=${amount}&cu=INR`;
-    const qrImgUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiLink)}`;
-    document.getElementById('upi-qr-img').src = qrImgUrl;
-    document.getElementById('upi-id-display').textContent = UPI_ID;
-    upiBox.style.display = 'block';
-  } else {
-    upiBox.style.display = 'none';
-  }
-}
-
 document.addEventListener('DOMContentLoaded', () => {
   if (Cart.read().length === 0) {
     window.location.href = 'cart.html';
     return;
   }
   renderOrderSummary();
-  updateUpiBox();
-
-  document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
-    radio.addEventListener('change', updateUpiBox);
-  });
 
   document.getElementById('checkout-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const errorEl = document.getElementById('checkout-error');
     errorEl.textContent = '';
 
-    const selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
-
-    if (selectedMethod === 'UPI' && !document.getElementById('upi-paid-confirm').checked) {
-      errorEl.textContent = 'Please complete the UPI payment and tick "I have completed the payment" before placing the order.';
-      return;
-    }
-
     const payload = {
       customer_name: document.getElementById('customer_name').value.trim(),
       customer_email: document.getElementById('customer_email').value.trim(),
       customer_phone: document.getElementById('customer_phone').value.trim(),
       address: document.getElementById('address').value.trim(),
-      payment_method: selectedMethod,
+      payment_method: 'COD',
       items: Cart.read().map(i => ({ slug: i.slug, qty: i.qty }))
     };
 
