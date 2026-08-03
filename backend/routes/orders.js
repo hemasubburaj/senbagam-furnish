@@ -7,7 +7,7 @@ const Order = require('../models/Order');
 // POST /api/orders  { customer_name, customer_email, customer_phone, address, items: [{slug, qty}] }
 router.post('/', async (req, res) => {
   try {
-    const { customer_name, customer_email, customer_phone, address, items } = req.body;
+    const { customer_name, customer_email, customer_phone, address, items, payment_method } = req.body;
 
     if (!customer_name || !customer_email || !customer_phone || !address || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ error: 'Missing customer details or an empty cart.' });
@@ -31,7 +31,8 @@ router.post('/', async (req, res) => {
     const order = await Order.create({
       customer_name, customer_email, customer_phone, address,
       items: resolvedItems,
-      total
+      total,
+      payment_method: ['COD', 'UPI'].includes(payment_method) ? payment_method : 'COD'
     });
 
     res.status(201).json({
