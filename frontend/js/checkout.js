@@ -53,12 +53,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const errorEl = document.getElementById('checkout-error');
     errorEl.textContent = '';
 
+    const selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
+
+    if (selectedMethod === 'UPI' && !document.getElementById('upi-paid-confirm').checked) {
+      errorEl.textContent = 'Please complete the UPI payment and tick "I have completed the payment" before placing the order.';
+      return;
+    }
+
     const payload = {
       customer_name: document.getElementById('customer_name').value.trim(),
       customer_email: document.getElementById('customer_email').value.trim(),
       customer_phone: document.getElementById('customer_phone').value.trim(),
       address: document.getElementById('address').value.trim(),
-      payment_method: document.querySelector('input[name="payment_method"]:checked').value,
+      payment_method: selectedMethod,
       items: Cart.read().map(i => ({ slug: i.slug, qty: i.qty }))
     };
 

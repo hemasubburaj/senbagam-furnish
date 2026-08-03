@@ -104,7 +104,11 @@
           <div class="upi-box" id="upi-box">
             <img id="upi-qr-img" src="" alt="UPI QR code">
             <div class="upi-id" id="upi-id-display"></div>
-            <p class="upi-note">Scan this code in any UPI app (GPay, PhonePe, Paytm) and pay the exact amount shown. Then click "Place order" below — we'll confirm your payment before shipping.</p>
+            <p class="upi-note">Scan this code in any UPI app (GPay, PhonePe, Paytm) and pay the exact amount shown.</p>
+            <label style="display:flex; align-items:center; gap:8px; margin-top:14px; font-size:13px; cursor:pointer;">
+              <input type="checkbox" id="upi-paid-confirm" style="width:auto; margin:0;">
+              <span>I have completed the payment</span>
+            </label>
           </div>
 
           <button type="submit" class="btn btn-primary" id="place-order-btn" style="margin-top:22px;">Place order</button>
